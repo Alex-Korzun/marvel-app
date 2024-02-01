@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
@@ -19,7 +20,6 @@ class CharInfo extends Component {
 
     componentDidMount() {
         this.updateChar();
-        console.log(this.state.char);
     }
 
     componentDidUpdate(prevProps) {
@@ -123,6 +123,10 @@ const View = ({ char }) => {
             </ul>
         </>
     )
+}
+
+CharInfo.propTypes = {
+    id: PropTypes.number
 }
 
 export default CharInfo;
