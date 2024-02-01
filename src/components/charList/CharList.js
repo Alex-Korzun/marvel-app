@@ -1,4 +1,5 @@
 import { Component } from 'react';
+
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
@@ -6,6 +7,7 @@ import Spinner from '../spinner/Spinner';
 import './charList.scss';
 
 class CharList extends Component {
+
     state = {
         charList: [],
         loading: true,
@@ -18,7 +20,7 @@ class CharList extends Component {
         this.marvelService
             .getAllCharacters()
             .then(this.onCharListLoaded)
-            .catch(this.onError)
+            .catch(this.onError);
     }
 
     onCharListLoaded = (charList) => {
@@ -36,11 +38,36 @@ class CharList extends Component {
         })
     }
 
+    createCharList = (charList) => {
+        const itemsList = [];
+
+        charList.forEach(({ thumbnail, name, id }) => {
+            const style = thumbnail.includes('image_not_available') ? 'unset' : 'cover';
+            
+            itemsList.push(
+                <li key={id}
+                    className="char__item"
+                    onClick={() => this.props.onCharSelected(id)}>
+                    <img src={thumbnail} style={ {objectFit: `${style}`} } alt={name}/>
+                    <div className="char__name">{name}</div>
+                </li>)
+
+        });
+
+        return (
+            <ul className="char__grid">
+                {itemsList}
+            </ul>
+        )
+    }
+
     render() {
         const { charList, error, loading } = this.state;
+
+        const list = this.createCharList(charList);
         const errorMessage = error ? <ErrorMessage /> : null;
         const spinner = loading ? <Spinner /> : null;
-        const content = !(loading || error) ? <View charList={charList} /> : null;
+        const content = !(loading || error) ? list : null;
 
         return (
             <div className="char__list">
@@ -53,26 +80,6 @@ class CharList extends Component {
             </div>
         )
     }
-}
-
-const View = ({charList}) => {
-    const itemsList = [];
-
-    charList.forEach(({ thumbnail, name, id }) => {
-        const style = thumbnail.includes('image_not_available') ? 'unset' : 'cover';
-        itemsList.push(
-            <li key={id} className="char__item">
-                <img src={thumbnail} style={ {objectFit: `${style}`} } alt={name}/>
-                <div className="char__name">{name}</div>
-            </li>)
-
-    });
-
-    return (
-        <ul className="char__grid">
-            {itemsList}
-        </ul>
-    )
 }
 
 export default CharList;

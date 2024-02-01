@@ -1,4 +1,5 @@
 import { Component } from 'react';
+
 import Spinner from '../spinner/Spinner';
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -7,6 +8,7 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component {
+
     state = {
         char: {},
         loading: true,
@@ -49,11 +51,12 @@ class RandomChar extends Component {
         this.marvelService
             .getACharacter(id)
             .then(this.onCharLoaded)
-            .catch(this.onError)
+            .catch(this.onError);
     }
 
     render () {
         const { char, loading, error } = this.state;
+        
         const errorMessage = error ? <ErrorMessage /> : null;
         const spinner = loading ? <Spinner /> : null;
         const content = !(loading || error) ? <View char={char} /> : null;
@@ -81,7 +84,7 @@ class RandomChar extends Component {
     }
 }
 
-const View = ({char}) => {
+const View = ({ char }) => {
     const { name, description, thumbnail, homepage, wiki } = char;
 
     const style = thumbnail.includes('image_not_available') ? 'contain' : 'cover';
