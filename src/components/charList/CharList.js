@@ -58,11 +58,11 @@ class CharList extends Component {
 const View = ({charList}) => {
     const itemsList = [];
 
-    charList.forEach(({ thumbnail, name }) => {
+    charList.forEach(({ thumbnail, name, id }) => {
         const style = thumbnail.includes('image_not_available') ? 'contain' : 'cover';
         itemsList.push(
-            <li key={name} className="char__item">
-                <img src={thumbnail} style={{ objectFit: `${style}` }} alt={name}/>
+            <li key={id} className="char__item">
+                <img src={thumbnail} style={ {objectFit: `${style}`} } alt={name}/>
                 <div className="char__name">{name}</div>
             </li>)
 
