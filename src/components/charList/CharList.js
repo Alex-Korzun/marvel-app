@@ -59,7 +59,7 @@ const View = ({charList}) => {
     const itemsList = [];
 
     charList.forEach(({ thumbnail, name, id }) => {
-        const style = thumbnail.includes('image_not_available') ? 'contain' : 'cover';
+        const style = thumbnail.includes('image_not_available') ? 'unset' : 'cover';
         itemsList.push(
             <li key={id} className="char__item">
                 <img src={thumbnail} style={ {objectFit: `${style}`} } alt={name}/>
