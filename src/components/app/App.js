@@ -35,7 +35,7 @@ const App = () => {
                 </div> */}
                 <AppBanner />
                 <ComicsList />
-                <img className="bg-decoration" src={decoration} alt="vision"/>
+                {/* <img className="bg-decoration" src={decoration} alt="vision"/> */}
             </main>
         </div>
     )
