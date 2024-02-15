@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import Spinner from '../spinner/Spinner';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import './randomChar.scss';
@@ -10,10 +10,7 @@ import mjolnir from '../../resources/img/mjolnir.png';
 const RandomChar = () => {
 
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-
-    const marvelService = new MarvelService();
+    const { loading, error, getACharacter, clearError } = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -21,29 +18,15 @@ const RandomChar = () => {
 
     const onCharLoaded = (char) => {
         setChar(char);
-        setLoading(false);
-        setError(false);
-    }
-
-    const onCharLoading = () => {
-        setLoading(true);
-    }
-
-    const onError = () => {
-        setLoading(false);
-        setError(true);
     }
 
     const updateChar = () => {
         // const id = Math.floor(Math.random() * (1017858 - 1009144) + 1009144);
+        clearError();
         const id = Math.floor(Math.random() * (1011355  - 1009144) + 1009144);
 
-        if (!error) {
-            onCharLoading();
-        }
-        marvelService.getACharacter(id)
-            .then(onCharLoaded)
-            .catch(onError);
+        getACharacter(id)
+            .then(onCharLoaded);
     }
         
     const errorMessage = error ? <ErrorMessage /> : null;
@@ -52,9 +35,9 @@ const RandomChar = () => {
 
     return (
         <div className="randomchar">
+            {content}
             {errorMessage}
             {spinner}
-            {content}
             <div className="randomchar__static">
                 <p className="randomchar__title">
                     Random character for today!<br/>
@@ -75,7 +58,10 @@ const RandomChar = () => {
 const View = ({ char }) => {
     const { name, description, thumbnail, homepage, wiki } = char;
 
-    const style = thumbnail.includes('image_not_available') ? 'contain' : 'cover';
+    let style = {'objectFit' : 'cover'};
+    if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+        style = {'objectFit' : 'contain'};
+    }
 
     return (
         <div className="randomchar__block">
