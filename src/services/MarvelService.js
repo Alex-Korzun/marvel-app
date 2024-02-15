@@ -8,19 +8,14 @@ const useMarvelService = () => {
     const _apiKey = 'apikey=16c589ca0e04266dbd56046ec8008f68';
     const _baseOffset = 210;
 
-    // const getResource = async (url) => {
-    //     let res = await fetch(url);
-
-    //     if (!res.ok) {
-    //         throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-    //     }
-
-    //     return await res.json();
-    // }
-
     const getAllCharacters = async (offset = _baseOffset) => {
         const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
         return res.data.results.map(_transformCharacter);
+    }
+
+    const getAllComics = async (offset = _baseOffset) => {
+        const res = await request(`${_apiBase}comics?limit=8&offset=${offset}&${_apiKey}`);
+        return res.data.results.map(_transformComic);
     }
 
     const getACharacter = async (id) => {
@@ -40,7 +35,16 @@ const useMarvelService = () => {
         }
     }
 
-    return {loading, error, getAllCharacters, getACharacter, clearError}
+    const _transformComic = (comic) => {
+        return {
+            id: comic.id,
+            title: comic.title,
+            thumbnail: comic.thumbnail.path + '.' + comic.thumbnail.extension,
+            price: comic.prices[0].price ? `${comic.prices[0].price}` : 'NOT AVAILABLE'
+        }
+    }
+
+    return {loading, error, getAllCharacters, getACharacter, clearError, getAllComics}
 }
 
 export default useMarvelService;

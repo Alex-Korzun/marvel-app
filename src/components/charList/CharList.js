@@ -68,8 +68,8 @@ const CharList = (props) => {
                         }
                     }}
                     ref={element => refs.current[index] = element}>
-                    <img src={thumbnail} style={ {objectFit: `${style}`} } alt={name}/>
-                    <div className="char__name">{name}</div>
+                        <img src={thumbnail} style={ {objectFit: `${style}`} } alt={name}/>
+                        <div className="char__name">{name}</div>
                 </li>)
 
         });
