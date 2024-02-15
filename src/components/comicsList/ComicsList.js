@@ -40,9 +40,7 @@ const ComicsList = () => {
     function createComicsList(comicsList) {
         const itemsList = [];
 
-        comicsList.forEach(({ thumbnail, title, price, id }, index) => {
-            const style = thumbnail.includes('image_not_available') ? 'contain' : 'cover';
-
+        comicsList.forEach(({ thumbnail, title, price, id }) => {
             itemsList.push(
                 <li key={id}
                     tabIndex={0}
