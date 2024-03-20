@@ -1,20 +1,20 @@
-import { useState, useEffect, Component } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import useMarvelService from "../../services/MarvelService";
-import ErrorMessage from "../errorMessage/ErrorMessage";
-import Spinner from "../spinner/Spinner";
 import AppBanner from "../appBanner/AppBanner";
+import setContent from "../../utils/setContent";
 
 const SinglePageTemplate = ({ Component, type }) => {
 
     const { id } = useParams();
-    const[data, setData] = useState(null);
+    const [data, setData] = useState(null);
 
-    const { loading, error, getAComic, clearError, getACharacter } = useMarvelService();
+    const { getAComic, clearError, getACharacter, process, setProcess } = useMarvelService();
 
     useEffect(() => {
         updateComic();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     const updateComic = () => {
@@ -24,27 +24,26 @@ const SinglePageTemplate = ({ Component, type }) => {
             case 'comic' :
                 getAComic(id)
                     .then(onDataLoaded)
+                    .then(() => setProcess('confirmed'));
                 break;
             case 'char' :
                 getACharacter(id)
-                    .then(onDataLoaded);
+                    .then(onDataLoaded)
+                    .then(() => setProcess('confirmed'));
+                break;
+            default : 
+                throw new Error('Type of Single Page is incorrect');
         }
     }
 
     const onDataLoaded = (data) => {
         setData(data);
     }
-
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error || !data) ? <Component data={data} /> : null;
     
     return (
         <>
             <AppBanner />
-            {errorMessage}
-            {spinner}
-            {content}
+            {setContent(process, Component, data)}
         </>
     )
 }
