@@ -14,6 +14,7 @@ const SinglePageTemplate = ({ Component, type }) => {
 
     useEffect(() => {
         updateComic();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     const updateComic = () => {
@@ -29,6 +30,9 @@ const SinglePageTemplate = ({ Component, type }) => {
                 getACharacter(id)
                     .then(onDataLoaded)
                     .then(() => setProcess('confirmed'));
+                break;
+            default : 
+                throw new Error('Type of Single Page is incorrect');
         }
     }
 
